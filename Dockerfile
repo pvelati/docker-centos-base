@@ -1,6 +1,9 @@
 FROM centos:7
 LABEL maintainer="Paolo Velati"
 
+# Install dnf command
+RUN yum install -y dnf
+
 # Update sources and upgrade packages
 RUN dnf -y update 
 
@@ -16,10 +19,8 @@ RUN dnf install -y epel-release \
 RUN rm -rf /usr/share/doc /usr/share/man /tmp/* /var/tmp/* 
 
 # Set default apps
-RUN alternatives --install /usr/bin/pip pip /usr/bin/pip3 1 
-
-# Fix python3 as default
-RUN ln -s /usr/bin/python3 /usr/bin/python
+RUN alternatives --install /usr/bin/pip pip /usr/bin/pip3 1 \
+    && alternatives --install /usr/bin/python python /usr/bin/python3 1
 
 # Prepare host for ansible 
 RUN mkdir -p /etc/ansible
